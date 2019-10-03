@@ -3,6 +3,7 @@ const db = require('./postDb')
 
 const router = express.Router();
 router.use(express.json())
+router.use(logger)
 
 router.get('/', (req, res) => {
     db.get()
@@ -104,5 +105,14 @@ router.post('/', (req, res) => {
 function validatePostId(req, res, next) {
 
 };
+function logger(req, res, next) {
+    console.log(
+        `[${new Date().toISOString()}] ${req.method} to ${req.url} from ${req.get(
+            'Origin'
+        )}`
+    );
+
+    next();
+}
 
 module.exports = router;
