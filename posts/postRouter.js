@@ -87,6 +87,18 @@ router.put('/:id', (req, res) => {
         })
 });
 
+router.post('/', (req, res) => {
+    db.insert(req.body)
+        .then(posted => {
+            res.json(posted)
+        })
+        .catch(err => {
+            res.status(500).res.json({
+                error: err,
+                message: "could not post ... post"
+            })
+        })
+})
 // custom middleware
 
 function validatePostId(req, res, next) {
