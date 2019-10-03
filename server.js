@@ -1,14 +1,12 @@
 const express = require('express');
 
-
+const apiRoutes = require('./index')
 
 const server = express();
 
+server.use('/api/', apiRoutes)
 
-
-server.get('/', (req, res) => {
-  res.send(`<h2>Let's write some middleware!</h2>`)
-});
+server.use(express.json())
 
 //custom middleware
 

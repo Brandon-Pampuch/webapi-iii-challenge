@@ -1,6 +1,8 @@
-const express = 'express';
+const express = require('express');
+const db = require('./userDb.js')
 
 const router = express.Router();
+router.use(express.json())
 
 router.post('/', (req, res) => {
 
@@ -11,8 +13,25 @@ router.post('/:id/posts', (req, res) => {
 });
 
 router.get('/', (req, res) => {
+    db.get()
+        .then(users => {
+            if (users) {
+                res.json(users)
+            } else {
+                res.status(404).json({
+                    message: "could not find users"
+                })
 
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err,
+                message: "failed to get users"
+            })
+        })
 });
+
 
 router.get('/:id', (req, res) => {
 
