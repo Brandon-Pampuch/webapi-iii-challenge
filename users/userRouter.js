@@ -117,7 +117,7 @@ router.delete('/:id', validateUserId, (req, res) => {
         })
 });
 
-router.put('/:id', validateUserId, (req, res) => {
+router.put('/:id', validateUserId, validateUser, (req, res) => {
     const { id } = req.params
     const updatedUser = req.body
     console.log(updatedUser)
@@ -157,6 +157,13 @@ function validateUserId(req, res, next) {
 };
 
 function validateUser(req, res, next) {
+    if (req.body.name) {
+        next()
+    } else {
+        res.status(400).json({
+            message: "missing post data"
+        })
+    }
 
 };
 
