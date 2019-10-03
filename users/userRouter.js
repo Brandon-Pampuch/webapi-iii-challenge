@@ -53,7 +53,7 @@ router.get('/', (req, res) => {
 });
 
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validateUserId, (req, res) => {
     const { id } = req.params
     db.getById(id)
         .then(user => {
@@ -74,7 +74,7 @@ router.get('/:id', (req, res) => {
         })
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', validateUserId, (req, res) => {
     const { id } = req.params
     db.getUserPosts(id)
         .then(posts => {
@@ -94,7 +94,7 @@ router.get('/:id/posts', (req, res) => {
         })
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId, (req, res) => {
     const { id } = req.params
     db.remove(id)
         .then(post => {
@@ -117,7 +117,7 @@ router.delete('/:id', (req, res) => {
         })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateUserId, (req, res) => {
     const { id } = req.params
     const updatedUser = req.body
     console.log(updatedUser)
@@ -143,7 +143,17 @@ router.put('/:id', (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
-
+    const { id } = req.params
+    db.getById(id)
+        .then(user => {
+            if (user) {
+                next()
+            } else {
+                res.status(400).json({
+                    message: "invalid user id"
+                })
+            }
+        })
 };
 
 function validateUser(req, res, next) {
